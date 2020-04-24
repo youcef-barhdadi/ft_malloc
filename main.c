@@ -1,11 +1,21 @@
 # include "ft_malloc.h"
+
+
 int main(int argc, char **argv)
 {
 
-	char *a1 = ft_malloc(2);
-	char *a4 = ft_malloc(40);
-	char *a2 = ft_malloc(1000);
-	char *a14 = ft_malloc(1330007);
+	char *a1 = ft_malloc(1);
+	char *a4 = ft_malloc(27);
+	char *a5 = ft_malloc(3);
+	char *a6 = ft_malloc(4);
+
+	a1[0] = 'a';
+
+
+
+	ft_free(a6);
+	ft_free(a1);
+/*	char *a14 = ft_malloc(1330007);
 
 	t_zone *z = g_zone;
 
@@ -22,6 +32,6 @@ int main(int argc, char **argv)
 	}
 
 
-
+*/
 	return (0);
 }
