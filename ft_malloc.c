@@ -1,6 +1,5 @@
 # include "ft_malloc.h"
 
-t_zone *g_zone;
 
 
 
@@ -69,6 +68,7 @@ void *allocate(size_t size) {
 	if (g_zone == NULL)
 	{
 		zone = create_zone(size);
+		zone->count++;
 		return (void *)zone + sizeof(t_zone) + sizeof(t_block);
 	}
 	zone = find_zone(size);
@@ -76,10 +76,14 @@ void *allocate(size_t size) {
 	{
 	
 		zone = create_zone(size);
+		zone->count++;
 		return zone;
 	}
 	t_block *block = (t_block *)((void *)zone + sizeof(t_zone));
 
+	/// increment zone count
+	
+		zone->count++;
 	while (block)
 	{
 	 	
@@ -108,91 +112,6 @@ void *ft_malloc(size_t size)
 		return (NULL);
 	return allocate(size);
 
-}
-
-
-void zone_tofree(void *ptr, t_block **block, t_zone **zone)
-{
-
-	t_zone *z = g_zone;
-	t_block *b;
-	void *p;
-	while (z)
-	{
-		b = (t_block *)((void*)z + sizeof(t_zone));
-
-		while (b)
-		{
-			
-			p = ((void *)b + sizeof(t_block));
-			if (p == ptr)
-			{
-				*zone = z;
-			*block = b;
-			printf("%p\n", block);
-				return ;
-			}
-			b = b->next;
-		}
-	
-		z = z->next;
-	}
-
-	zone = NULL;
-	block = NULL;
-
-}
-
-
-void	marge_block(t_block *block)
-{
-	
-	t_block *prev;
-	t_block *next;
-
-	prev = block->prev;
-	next = block->next;
-	// first case
-	if ( next  && prev  && next->free && prev->free)
-	{	
-		prev->size = next->size + block->size + ( 2* sizeof(block));
-		memset(next, 0, sizeof (t_block));
-		memset(block, 0, sizeof (t_block));
-	}
-	else if (next && next->free)
-	{
-		block->size = next->size + sizeof(t_zone);
-		memset(next, 0, sizeof (t_block));
-	}
-	else if (prev && prev->free)
-	{
-	
-		prev->size = block->size + ( sizeof(block));
-	}
-
-
-}
-
-
-void free_emty_zone(t_zone *zone)
-{
-	if (zone->count == 0)
-	{
-		munmap((void *)zone, zone->size);	
-	}
-
-}
-
-void ft_free(void *ptr)
-{
-	
-	t_block *block;
-	t_zone *zone;
-
-	zone->count--;
-	zone_tofree(ptr, &block,&zone);
-	block->free = 1;
-	marge_block(block);
 }
 
 
