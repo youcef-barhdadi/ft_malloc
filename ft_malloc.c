@@ -113,5 +113,3 @@ void *ft_malloc(size_t size)
 	return allocate(size);
 
 }
-
-

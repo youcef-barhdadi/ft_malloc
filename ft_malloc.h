@@ -25,7 +25,7 @@ typedef struct s_block
 	struct s_block *prev;
 }		t_block;
 
-extern  t_zone *g_zone;
+t_zone *g_zone;
 t_block 	*init_block(t_block *block, t_zone *data,size_t size);
 t_zone 		*init_zone(t_zone *zone, size_t size);
 unsigned char 	get_type(size_t size);
